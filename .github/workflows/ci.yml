@@ -106,7 +106,6 @@ jobs:
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
-        if: github.event_name == 'release' && github.event.action == 'published'
         with:
           name: artifact-wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
@@ -114,7 +113,6 @@ jobs:
   build_sdist:
     name: Build Source Distribution
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
       - uses: actions/checkout@v4
@@ -133,18 +131,18 @@ jobs:
           name: artifact-sdist
           path: dist/*.tar.gz
 
-  upload_pypi:
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    if: github.event_name == 'release' && github.event.action == 'published'
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          merge-multiple: true
-          path: dist
-          pattern: artifact-*
-
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+#  upload_pypi:
+#    needs: [build_wheels, build_sdist]
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write
+#    if: github.event_name == 'release' && github.event.action == 'published'
+#    steps:
+#      - uses: actions/download-artifact@v4
+#        with:
+#          merge-multiple: true
+#          path: dist
+#          pattern: artifact-*
+#
+#      - name: Publish package distributions to PyPI
+#        uses: pypa/gh-action-pypi-publish@release/v1
